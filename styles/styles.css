@@ -1,0 +1,152 @@
+/* ====== PALETA DE COLORES ======
+#263244  (azul oscuro principal)
+#f6f5f0  (blanco crema fondo)
+#ccab68  (dorado acento)
+#d6cab3  (beige suave)
+#79818a  (gris azulado claro)
+#647484  (gris azulado medio)
+================================== */
+
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilos generales */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f6f5f0;
+    color: #263244;
+    line-height: 1.6;
+}
+
+/* ===== HEADER ===== */
+header {
+    background-color: #263244;
+    padding: 20px 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #f6f5f0;
+    font-weight: bold;
+    transition: 0.3s ease;
+}
+
+nav a:hover {
+    color: #ccab68;
+}
+
+/* ===== SECCIONES ===== */
+section {
+    padding: 60px 10%;
+}
+
+section h1, 
+section h2 {
+    margin-bottom: 20px;
+    color: #263244;
+}
+
+section p {
+    margin-bottom: 20px;
+    color: #647484;
+}
+
+/* ===== HOME ===== */
+#Home {
+    background-color: #d6cab3;
+    text-align: center;
+    border-radius: 8px;
+    margin: 40px 10%;
+    padding: 60px 40px;
+}
+
+#Home h1 {
+    color: #263244;
+}
+
+/* ===== TRAVELS ===== */
+#Travels {
+    text-align: center;
+}
+
+.vuelo {
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 30px auto;
+    max-width: 500px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.vuelo:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.vuelo h3 {
+    margin-bottom: 15px;
+    color: #ccab68;
+}
+
+.vuelo p {
+    margin: 8px 0;
+    color: #79818a;
+}
+
+.vuelo strong {
+    color: #263244;
+}
+
+/* ===== CALENDAR, CONTACT, ABOUT ===== */
+#Calendar,
+#Contact,
+#About {
+    background-color: #d6cab3;
+    border-radius: 8px;
+    margin: 40px 10%;
+}
+
+/* ===== FOOTER ===== */
+footer {
+    background-color: #263244;
+    color: #f6f5f0;
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    section {
+        padding: 40px 5%;
+    }
+
+    .vuelo {
+        max-width: 100%;
+    }
+
+    #Home,
+    #Calendar,
+    #Contact,
+    #About {
+        margin: 20px 5%;
+    }
+}
