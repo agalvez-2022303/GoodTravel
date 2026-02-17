@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Calendario</title>
+
+  <!-- Enlace al CSS -->
+  <link rel="stylesheet" href="calendario.css">
+</head>
+<body>
+
+  <section id="Calendar">
+    <h1>Seleccione las fechas de su viaje</h1>
+    <p>Elija primero la fecha de salida y luego la fecha de regreso:</p>
+
+    <div class="calendar-group">
+      <!-- NUEVO: destino -->
+      <div class="calendar-item calendar-destination">
+        <label for="destination">Destino:</label>
+        <input
+          type="text"
+          id="destination"
+          name="destination"
+          placeholder="¿A dónde irás?"
+          inputmode="text"
+          autocomplete="off"
+          aria-label="Destino del viaje">
+      </div>
+
+      <!-- salida -->
+      <div class="calendar-item">
+        <label for="checkout">Fecha de salida:</label>
+        <input type="date" id="checkout" name="checkout" placeholder="dd/mm/aaaa">
+      </div>
+
+      <!-- regreso -->
+      <div class="calendar-item">
+        <label for="checkin">Fecha de regreso:</label>
+        <input type="date" id="checkin" name="checkin" placeholder="dd/mm/aaaa">
+      </div>
+
+      <!-- botón en la misma línea -->
+      <div class="cta-row">
+        <button class="button-primary" type="button">Buscar disponibilidad</button>
+      </div>
+    </div>
+
+    <p class="calendar-note">
+      *Asegúrese de que la fecha de regreso sea después de la fecha de salida.
+    </p>
+  </section>
+
+</body>
+</html>
