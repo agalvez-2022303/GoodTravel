@@ -1,0 +1,472 @@
+/* ===============================
+   Calendario — Agencia de Viajes
+   Paleta personalizada + versión compacta tipo "barra"
+   Incluye: campo DESTINO en la misma línea que Salida, Regreso y el Botón
+   =============================== */
+
+/* ===== PALETA ===== */
+:root{
+  --pri-900: #263244;   /* Primario profundo */
+  --base-50: #f6f5f0;   /* Fondo base claro */
+  --acc-600: #ccab68;   /* Acento cálido (CTA, iconos) */
+  --surf-100: #d6cab3;  /* Superficie suave (tarjetas) */
+  --neu-500: #79818a;   /* Texto secundario */
+  --neu-600: #647484;   /* Labels / párrafos guía */
+  --neu-700: #6c6c7c;   /* Bordes y líneas */
+  --acc-300: #dccc94;   /* Acento suave (notas/badges) */
+
+  --ring: color-mix(in srgb, var(--neu-700) 50%, transparent);
+  --shadow: 0 10px 26px rgba(38, 50, 68, .18);
+
+  --radius-lg: 16px;
+  --radius-md: 12px;
+}
+
+/* ===== MODO OSCURO ===== */
+@media (prefers-color-scheme: dark){
+  :root{
+    --base-50: #1c2330;
+    --surf-100: #2a3444;
+    --ring: color-mix(in srgb, #111 40%, var(--neu-700) 60%);
+    --shadow: 0 12px 34px rgba(0,0,0,.45);
+  }
+}
+
+/* ===== LAYOUT GENERAL (compacto y arriba) ===== */
+#Calendar{
+  position: relative;
+  padding: 14px 12px;    /* pegado arriba y a los lados */
+  min-height: auto;
+  background:
+    radial-gradient(900px 450px at 100% 0%,
+      color-mix(in srgb, var(--acc-600) 16%, transparent) 0%, transparent 60%),
+    radial-gradient(800px 400px at 0% 100%,
+      color-mix(in srgb, var(--acc-300) 18%, transparent) 0%, transparent 60%),
+    var(--base-50);
+}
+
+/* Trama sutil */
+#Calendar::before{
+  content:"";
+  position:absolute; inset:0;
+  background:
+    linear-gradient(0deg, transparent 49%, rgba(108,108,124,.05) 50%, transparent 51%),
+    linear-gradient(90deg, transparent 49%, rgba(108,108,124,.05) 50%, transparent 51%);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(60% 60% at 50% 40%, #000 60%, transparent 100%);
+  pointer-events:none;
+}
+
+/* Título y texto guía (compactos) */
+#Calendar h1{
+  margin: 0 auto 4px;
+  max-width: 1120px;
+  font-size: clamp(1.2rem, 2.6vw, 1.7rem);
+  line-height: 1.15;
+  font-weight: 800;
+  color: var(--pri-900);
+  letter-spacing: .2px;
+}
+#Calendar > p{
+  margin: 2px auto 6px;
+  max-width: 1120px;
+  color: var(--neu-600);
+  font-size: .9rem;
+}
+
+/* ===== GRID TIPO BARRA (incluye DESTINO) ===== */
+.calendar-group{
+  display: grid;
+  grid-template-columns: 1fr;       /* móvil: una columna */
+  gap: 8px;                         /* separación mínima */
+  max-width: 1120px;
+  margin: 6px auto 0;
+  align-items: center;
+}
+
+/* Desktop: 4 columnas → Destino | Salida | Regreso | Botón */
+@media (min-width: 860px){
+  .calendar-group{
+    grid-template-columns: 1.4fr 1fr 1fr auto;
+  }
+
+  /* Ubicación explícita por contenido (no requiere cambiar HTML) */
+  .calendar-group > .calendar-item:has(#destination){ grid-column: 1; }
+  .calendar-group > .calendar-item:has(#checkout){    grid-column: 2; }
+  .calendar-group > .calendar-item:has(#checkin){     grid-column: 3; }
+  .calendar-group > .cta-row{                          grid-column: 4; }
+}
+
+/* ===== TARJETAS (look “barra”) ===== */
+.calendar-item{
+  position: relative;
+  padding: 8px 10px;                       /* compacto */
+  border-radius: 10px;                     /* radios discretos */
+  background: rgba(214,202,179,.45);       /* superficie en tu paleta */
+  border: 1px solid var(--ring);
+  box-shadow: 0 4px 12px rgba(38,50,68,.10); /* sombra contenida (no sobresale) */
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.calendar-item:hover{ box-shadow: 0 6px 16px rgba(38,50,68,.12); }
+.calendar-item:focus-within{
+  outline: 2px solid color-mix(in srgb, var(--acc-600) 60%, #fff 40%);
+  outline-offset: 2px;
+}
+
+/* Labels compactos */
+.calendar-item label{
+  display:block;
+  font-weight: 700;
+  color: var(--pri-900);
+  letter-spacing: .2px;
+  margin: 0 0 4px;
+  font-size: .88rem;
+  line-height: 1.1;
+}
+
+/* ===== CAMPOS (fecha y destino) ===== */
+
+/* Estilo base de inputs */
+input[type="date"],
+input[type="text"]{
+  width: 100%;
+  font: inherit;
+  padding: 8px 36px 8px 10px;  /* compacto */
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--neu-700) 40%, transparent);
+  background: linear-gradient(180deg, #ffffff,
+              color-mix(in srgb, #ffffff 70%, var(--surf-100) 30%));
+  color: var(--pri-900);
+  box-shadow: inset 0 1px 0 rgba(38,50,68,.05);
+  transition: border-color .18s ease,
+              box-shadow .18s ease,
+              background .18s ease;
+  font-size: .92rem;
+  line-height: 1.05;
+}
+
+/* Placeholder legible y ordenado */
+input::placeholder{
+  color: color-mix(in srgb, var(--neu-500) 70%, #fff 30%);
+  opacity: .9;
+}
+
+/* Hover/Focus consistentes */
+input[type="date"]:hover,
+input[type="text"]:hover{
+  /* sin “salto” visual */
+}
+input[type="date"]:focus,
+input[type="text"]:focus{
+  outline: none;
+  border-color: color-mix(in srgb, var(--acc-600) 65%, var(--neu-700) 35%);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--acc-600) 18%, transparent),
+    inset 0 1px 0 rgba(38,50,68,.05);
+  background: #fff;
+}
+
+/* Modo oscuro para inputs */
+@media (prefers-color-scheme: dark){
+  input[type="date"],
+  input[type="text"]{
+    background: linear-gradient(180deg,
+      color-mix(in srgb, #1e2635 80%, var(--surf-100) 20%),
+      #1a2230);
+    color: #e7e9ee;
+    border-color: color-mix(in srgb, var(--neu-700) 55%, transparent);
+  }
+  input::placeholder{ color: color-mix(in srgb, #c9d0da 80%, #000 20%); }
+}
+
+/* Quitar icono nativo del date en WebKit */
+input[type="date"]::-webkit-calendar-picker-indicator{
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* ===== Iconos contextuales por tipo de campo (sin tocar HTML) ===== */
+/* Icono calendario SOLO en tarjetas que contengan input date */
+.calendar-item:has(input[type="date"])::after{
+  content:"";
+  position: absolute;
+  top: 50%; right: 10px;
+  transform: translateY(-50%);
+  width: 16px; height: 16px;
+  background: no-repeat center/16px 16px url("data:image/svg+xml;utf8,\
+  <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ccab68'>\
+    <path d='M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a2 2 0 0 1 2 2v3H3V6a2 2 0 0 1 2-2h1V3a1 1 0 1 1 2 0v1zM3 10h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'/>\
+    <rect x='7' y='14' width='4' height='4' rx='1'/>\
+    <rect x='13' y='14' width='4' height='4' rx='1'/>\
+  </svg>");
+}
+
+/* Icono búsqueda SOLO en la tarjeta que contenga el input destino (type="text") */
+.calendar-item:has(#destination)::after,
+.calendar-item:has(input[type="text"])::after{
+  content:"";
+  position: absolute;
+  top: 50%; right: 10px;
+  transform: translateY(-50%);
+  width: 16px; height: 16px;
+  background: no-repeat center/16px 16px url("data:image/svg+xml;utf8,\
+  <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23263244'>\
+    <path d='M10 2a8 8 0 1 1 0 16 8 8 0 0 1 0-16zm11 19.59-4.7-4.7a10 10 0 1 0-1.41 1.41l4.7 4.7a1 1 0 0 0 1.41-1.41z'/>\
+  </svg>");
+}
+
+/* ===== CTA (misma línea) ===== */
+.cta-row{
+  display: flex;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+.button-primary{
+  --btn-a: var(--acc-600);
+  --btn-b: color-mix(in srgb, var(--acc-600) 65%, var(--pri-900) 35%);
+  padding: 8px 14px;           /* pequeño */
+  font-size: .92rem;
+  border-radius: 8px;
+  color: #1e1e1e;
+  border: 1px solid color-mix(in srgb, var(--pri-900) 15%, var(--acc-600) 85%);
+  background: linear-gradient(135deg, var(--btn-a), var(--btn-b));
+  cursor: pointer;
+  font-weight: 800;
+  letter-spacing: .2px;
+  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--acc-600) 24%, transparent);
+  white-space: nowrap;
+}
+.button-primary:hover{ transform: translateY(-1px); filter: brightness(1.05); }
+.button-primary:active{ transform: translateY(0); }
+
+/* Móvil: el botón baja a su propia fila para no romper el layout */
+@media (max-width: 859px){
+  .cta-row{ grid-column: 1 / -1; }
+}
+
+/* ===== NOTA (compacta y alineada) ===== */
+.calendar-note{
+  max-width: 1120px;
+  margin: 6px auto 0;
+  padding: 6px 8px;
+  font-size: .88rem;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--acc-300) 18%, #fff);
+  color: color-mix(in srgb, var(--pri-900) 85%, #000);
+  border: 1px dashed color-mix(in srgb, var(--acc-300) 65%, transparent);
+}
+.calendar-note::before{ content:"ℹ️"; margin-right: 8px; }
+
+/* ===== BADGES (si los usas) ===== */
+.badge{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:6px 10px; border-radius:999px; font-size:.86rem;
+  background: color-mix(in srgb, var(--acc-300) 35%, #fff);
+  color: color-mix(in srgb, var(--pri-900) 90%, #000);
+  border:1px solid color-mix(in srgb, var(--acc-300) 55%, transparent);
+}
+
+/* ===== VALIDACIÓN (clases para tu lógica JS) ===== */
+.is-invalid input[type="date"],
+.is-invalid input[type="text"]{
+  border-color: #b94a48;
+  box-shadow: 0 0 0 3px rgba(185,74,72,.15);
+}
+.is-valid input[type="date"],
+.is-valid input[type="text"]{
+  border-color: #3a8f6a;
+  box-shadow: 0 0 0 3px rgba(58,143,106,.15);
+}
+
+/* ===== ACCESIBILIDAD ===== */
+@media (prefers-reduced-motion: reduce){
+  *{ transition: none !important; }
+}
+
+/* ====== AJUSTE FINO: contención, tamaños y alineación ====== */
+
+/* 0) Vars de control de altura */
+:root{
+  --ctrl-h: 36px; /* altura uniforme de controles y botón */
+}
+
+/* 1) Sección más compacta arriba */
+#Calendar{
+  padding: 12px 10px;
+}
+
+/* 2) Grid estable: 4 columnas en escritorio, 1 en móvil */
+.calendar-group{
+  display: grid;
+  grid-template-columns: 1fr;         /* móvil */
+  align-items: center;
+  gap: 8px;
+  max-width: 1120px;
+  margin: 6px auto 0;
+  box-sizing: border-box;             /* evita ensanchamientos */
+}
+@media (min-width: 860px){
+  .calendar-group{
+    grid-template-columns: 1.2fr 0.9fr 0.9fr auto; /* destino más ancho */
+  }
+  /* Colocación por contenido (no cambia tu HTML) */
+  .calendar-group > .calendar-item:has(#destination){ grid-column: 1; }
+  .calendar-group > .calendar-item:has(#checkout){    grid-column: 2; }
+  .calendar-group > .calendar-item:has(#checkin){     grid-column: 3; }
+  .calendar-group > .cta-row{                          grid-column: 4; }
+}
+
+/* 3) Tarjetas: contención real y sombras discretas */
+.calendar-item{
+  position: relative;
+  padding: 6px 8px;                         /* más fino */
+  border-radius: 10px;
+  background: rgba(214,202,179,.40);
+  border: 1px solid var(--ring);
+  box-shadow: 0 3px 10px rgba(38,50,68,.10);
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  overflow: hidden;                          /* 🔒 nada se sale */
+  box-sizing: border-box;                    /* anchura exacta */
+}
+.calendar-item:hover{ box-shadow: 0 6px 16px rgba(38,50,68,.12); }
+
+.calendar-item:focus-within{
+  outline: 2px solid color-mix(in srgb, var(--acc-600) 60%, #fff 40%);
+  outline-offset: 2px;
+}
+
+/* 4) Labels compactos */
+.calendar-item label{
+  margin: 0 0 4px;
+  font-size: .86rem;
+  line-height: 1.1;
+  font-weight: 700;
+  color: var(--pri-900);
+}
+
+/* 5) Inputs: altura uniforme, sin “salirse” del borde */
+input[type="text"],
+input[type="date"]{
+  width: 100%;
+  height: var(--ctrl-h);
+  padding: 6px 34px 6px 10px;   /* espacio para icono a la derecha */
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--neu-700) 40%, transparent);
+  background: linear-gradient(180deg, #ffffff,
+              color-mix(in srgb, #ffffff 70%, var(--surf-100) 30%));
+  color: var(--pri-900);
+  font: inherit;
+  font-size: .9rem;
+  line-height: 1;               /* altura exacta del control */
+  box-shadow: inset 0 1px 0 rgba(38,50,68,.05);
+  transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+  box-sizing: border-box;       /* 🔒 contención horizontal */
+  background-clip: padding-box; /* 🔒 evita “bordes brillantes” */
+}
+input::placeholder{
+  color: color-mix(in srgb, var(--neu-500) 70%, #fff 30%);
+  opacity: .9;
+}
+
+/* sin saltos en hover */
+input[type="text"]:hover,
+input[type="date"]:hover{
+  transform: none;
+}
+input[type="text"]:focus,
+input[type="date"]:focus{
+  outline: none;
+  border-color: color-mix(in srgb, var(--acc-600) 65%, var(--neu-700) 35%);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--acc-600) 18%, transparent),
+    inset 0 1px 0 rgba(38,50,68,.05);
+  background: #fff;
+}
+
+/* Quita icono nativo del date (WebKit) */
+input[type="date"]::-webkit-calendar-picker-indicator{
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* 6) Iconos dentro SIN desbordar (más pequeños) */
+.calendar-item:has(input[type="date"])::after,
+.calendar-item:has(#destination)::after,
+.calendar-item:has(input[type="text"])::after{
+  content:"";
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  background-size: 14px 14px;
+}
+/* Calendario (para fechas) */
+.calendar-item:has(input[type="date"])::after{
+  background: no-repeat center/14px 14px url("data:image/svg+xml;utf8,\
+  <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ccab68'>\
+    <path d='M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a2 2 0 0 1 2 2v3H3V6a2 2 0 0 1 2-2h1V3a1 1 0 1 1 2 0v1zM3 10h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'/>\
+    <rect x='7' y='14' width='4' height='4' rx='1'/>\
+    <rect x='13' y='14' width='4' height='4' rx='1'/>\
+  </svg>");
+}
+/* Lupa (para destino) */
+.calendar-item:has(#destination)::after,
+.calendar-item:has(input[type="text"])::after{
+  background: no-repeat center/14px 14px url("data:image/svg+xml;utf8,\
+  <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23263244'>\
+    <path d='M10 2a8 8 0 1 1 0 16 8 8 0 0 1 0-16zm11 19.59-4.7-4.7a10 10 0 1 0-1.41 1.41l4.7 4.7a1 1 0 0 0 1.41-1.41z'/>\
+  </svg>");
+}
+
+/* 7) Botón: MISMA altura que los inputs y en la misma línea */
+.cta-row{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: var(--ctrl-h);
+}
+.button-primary{
+  height: var(--ctrl-h);
+  padding: 0 14px;
+  font-size: .9rem;
+  line-height: 1;                   /* centra el texto verticalmente */
+  border-radius: 8px;
+  color: #1e1e1e;
+  border: 1px solid color-mix(in srgb, var(--pri-900) 15%, var(--acc-600) 85%);
+  background: linear-gradient(135deg, var(--acc-600),
+              color-mix(in srgb, var(--acc-600) 65%, var(--pri-900) 35%));
+  cursor: pointer;
+  font-weight: 800;
+  letter-spacing: .2px;
+  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--acc-600) 22%, transparent);
+  white-space: nowrap;
+}
+.button-primary:hover{ transform: translateY(-1px); filter: brightness(1.05); }
+.button-primary:active{ transform: translateY(0); }
+
+/* 8) Nota compacta alineada al ancho de la barra */
+.calendar-note{
+  max-width: 1120px;
+  margin: 6px auto 0;
+  padding: 6px 8px;
+  font-size: .86rem;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--acc-300) 18%, #fff);
+  color: color-mix(in srgb, var(--pri-900) 85%, #000);
+  border: 1px dashed color-mix(in srgb, var(--acc-300) 65%, transparent);
+}
+.calendar-note::before{ content:"ℹ️"; margin-right: 8px; }
+
+/* 9) Responsivo: en pantallas chicas, el botón baja */
+@media (max-width: 859px){
+  .cta-row{ grid-column: 1 / -1; }
+}
+
+/* 10) Accesibilidad: menos movimiento si el usuario lo prefiere */
+@media (prefers-reduced-motion: reduce){
+  *{ transition: none !important; }
+}
